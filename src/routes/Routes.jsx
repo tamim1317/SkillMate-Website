@@ -5,6 +5,7 @@ import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import Profile from "../pages/Profile";
 import SkillDetails from "../pages/SkillDetails";
+import Auth from "../components/Auth";
 
 const router = createBrowserRouter([
   {
@@ -24,11 +25,13 @@ const router = createBrowserRouter([
       },
 
       { path: "/profile", 
-        element: <Profile></Profile>
+        element: <Auth><Profile></Profile></Auth>
       },
 
       { path: "/skills/:id", 
-        element: <SkillDetails></SkillDetails>
+        element: <Auth>
+            <SkillDetails></SkillDetails>
+        </Auth>
       },
     ],
   },
