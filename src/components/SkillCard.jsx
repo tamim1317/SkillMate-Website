@@ -1,52 +1,30 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-// Optional: import an animation library if you are using one here (e.g., AOS)
+import React from "react";
+import { Link } from "react-router-dom";
 
 const SkillCard = ({ skill }) => {
-    // Destructure properties from the 'skill' object
-    const { id, name, image, rating, price, description } = skill; 
+  const { skillId, skillName, image, rating, price } = skill;
 
-    return (
-        // Using a card class from DaisyUI/Tailwind for a clean look
-        <div 
-            className="card w-96 bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300 mx-auto"
-            // Optional: If using AOS, add data-aos attributes here, e.g., data-aos="fade-up"
-        >
-            {/* 🖼️ Skill Image */}
-            <figure>
-                <img 
-                    src={image} 
-                    alt={`Image for ${name}`} 
-                    className="h-56 w-full object-cover"
-                />
-            </figure>
-
-            {/* 📝 Card Body / Content */}
-            <div className="card-body p-5">
-                {/* 🏷️ Skill Name */}
-                <h2 className="card-title text-2xl font-semibold mb-2">{name}</h2>
-                
-                {/* ⭐ Rating & Price */}
-                <div className="flex justify-between items-center mb-4">
-                    <p className="text-lg font-medium text-yellow-600">
-                        Rating: {rating} / 5
-                    </p>
-                    <p className="text-xl font-bold text-blue-600">
-                        Price: ${price}
-                    </p>
-                </div>
-                
-                {/* 🔍 View Details Button */}
-                <div className="card-actions justify-end">
-                    <Link to={`/skill/${id}`}>
-                        <button className="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white border-0">
-                            View Details
-                        </button>
-                    </Link>
-                </div>
-            </div>
+  return (
+    <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-xl hover:shadow-2xl overflow-hidden transition-all duration-300 group">
+      <img
+        src={image}
+        alt={skillName}
+        className="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300"
+      />
+      <div className="p-6 flex flex-col justify-between h-64">
+        <div>
+          <h2 className="text-2xl font-bold mb-2">{skillName}</h2>
+          <p className="text-yellow-400 mb-2">Rating: {rating}</p>
+          <p className="text-blue-400 font-semibold mb-2">${price}</p>
         </div>
-    );
+        <Link to={`/skills/${skillId}`}>
+          <button className="mt-3 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl w-full text-white font-semibold shadow hover:from-indigo-600 hover:to-blue-500 transition-colors duration-300">
+            View Details
+          </button>
+        </Link>
+      </div>
+    </div>
+  );
 };
 
 export default SkillCard;

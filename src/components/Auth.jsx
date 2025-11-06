@@ -6,13 +6,13 @@ const Auth = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
   const location = useLocation();
 
-  if (loading) return <p>Loading...</p>; // show loading while checking auth
+  if (loading) return <p>Loading...</p>;
 
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return children; // ✅ render the protected component
+  return children;
 };
 
 export default Auth;

@@ -35,20 +35,20 @@ const router = createBrowserRouter([
           </Auth>
       },
 
-      { path: "/skills/:id", 
+      { path: "/skills/:id",
         element: <Auth>
-            <SkillDetails></SkillDetails>
-            </Auth>
+          <SkillDetails></SkillDetails>
+          </Auth>
       },
+
       {
         path: "/update-profile",
-        element:
-        <Auth>
+        element:<Auth>
         <UpdateProfile></UpdateProfile>
         </Auth>
       },
       {
-        path: "/forget-password",
+        path: "/forgot-password",
         element: <ForgotPassword></ForgotPassword>,
       },
     ],

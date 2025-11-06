@@ -5,81 +5,71 @@ import { toast } from "react-hot-toast";
 
 const UpdateProfile = () => {
   const { user } = useContext(AuthContext);
-
-  // State to hold form inputs
   const [displayName, setDisplayName] = useState("");
   const [photoURL, setPhotoURL] = useState("");
+  const [previewURL, setPreviewURL] = useState("");
 
-  // Initialize state with current user data
   useEffect(() => {
     if (user) {
       setDisplayName(user.displayName || "");
       setPhotoURL(user.photoURL || "");
+      setPreviewURL(user.photoURL || "https://via.placeholder.com/150");
     }
   }, [user]);
 
-  const handleUpdate = (e) => {
+  // Update preview image on change
+  useEffect(() => {
+    setPreviewURL(photoURL || "https://via.placeholder.com/150");
+  }, [photoURL]);
+
+  const handleUpdate = async (e) => {
     e.preventDefault();
+    if (!user) return toast.error("User not found!");
 
-    if (!user) return;
-
-    // Update Firebase user profile
-    updateProfile(user, {
-      displayName,
-      photoURL,
-    })
-      .then(() => {
-        toast.success("Profile updated successfully!");
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
+    try {
+      await updateProfile(user, { displayName, photoURL });
+      toast.success("Profile updated successfully!");
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white rounded shadow-md p-8 w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
+      <div className="bg-white/10 backdrop-blur-xl rounded-3xl shadow-xl p-10 w-full max-w-md">
+        <h2 className="text-4xl font-bold text-center text-blue-400 mb-6">
           Update Profile
         </h2>
 
+        {/* Avatar */}
         <div className="flex flex-col items-center mb-6">
           <img
-            src={photoURL || "https://via.placeholder.com/150"}
+            src={previewURL}
             alt="User Avatar"
-            className="w-24 h-24 rounded-full object-cover mb-2"
+            className="w-28 h-28 rounded-full object-cover mb-2 ring-2 ring-blue-400"
           />
-          <p className="font-medium">{displayName || "User Name"}</p>
-          <p className="text-gray-500">{user?.email}</p>
+          <p className="text-white font-semibold text-lg">{displayName || "User Name"}</p>
+          <p className="text-gray-300">{user?.email}</p>
         </div>
 
-        <form onSubmit={handleUpdate} className="space-y-4">
-          <div>
-            <label className="block mb-1 font-medium">Display Name</label>
-            <input
-              type="text"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-              className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="Your Name"
-            />
-          </div>
-
-          <div>
-            <label className="block mb-1 font-medium">Photo URL</label>
-            <input
-              type="text"
-              value={photoURL}
-              onChange={(e) => setPhotoURL(e.target.value)}
-              className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="Photo URL"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
-          >
+        {/* Form */}
+        <form onSubmit={handleUpdate} className="flex flex-col gap-4">
+          <input
+            type="text"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            className="p-3 rounded-xl bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+            placeholder="Display Name"
+            required
+          />
+          <input
+            type="text"
+            value={photoURL}
+            onChange={(e) => setPhotoURL(e.target.value)}
+            className="p-3 rounded-xl bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+            placeholder="Photo URL"
+          />
+          <button className="py-3 bg-gradient-to-r from-green-500 to-teal-500 text-white font-semibold rounded-xl hover:from-teal-500 hover:to-green-500 transition-colors mt-2">
             Update Profile
           </button>
         </form>
