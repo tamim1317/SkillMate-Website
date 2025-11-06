@@ -44,7 +44,7 @@ const Signup = () => {
         <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
-            <label className="block mb-1 font-medium">Name</label>
+            <label className="block mb-1 font-medium">First Name</label>
             <input
               type="text"
               required
@@ -54,7 +54,7 @@ const Signup = () => {
             />
           </div>
           <div>
-            <label className="block mb-1 font-medium">Photo URL</label>
+            <label className="block mb-1 font-medium">Last Name</label>
             <input
               type="text"
               value={photo}
@@ -89,7 +89,7 @@ const Signup = () => {
             Sign Up
           </button>
         </form>
-
+        <div className="my-4 text-center">OR</div>
         <button
           onClick={handleGoogleSignIn}
           className="w-full mt-4 bg-red-500 text-white py-2 rounded hover:bg-red-600 transition"

@@ -6,11 +6,13 @@ import Signup from "../pages/Signup";
 import Profile from "../pages/Profile";
 import SkillDetails from "../pages/SkillDetails";
 import Auth from "../components/Auth";
+import UpdateProfile from "../pages/UpdateProfile";
+
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout></MainLayout>,
+    element: <MainLayout></MainLayout> ,
     children: [
       { path: "/",
         element: <Home></Home>
@@ -33,6 +35,14 @@ const router = createBrowserRouter([
             <SkillDetails></SkillDetails>
         </Auth>
       },
+      {
+  path: "/update-profile",
+  element: (
+    <Auth>
+      <UpdateProfile></UpdateProfile>
+    </Auth>
+  ),
+}
     ],
   },
 ]);
