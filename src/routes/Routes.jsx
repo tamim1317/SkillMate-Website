@@ -7,12 +7,15 @@ import Profile from "../pages/Profile";
 import SkillDetails from "../pages/SkillDetails";
 import Auth from "../components/Auth";
 import UpdateProfile from "../pages/UpdateProfile";
+import ForgotPassword from "../pages/ForgotPassword";
+import ErrorPage from "../pages/ErrorPage";
 
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout></MainLayout> ,
+    element: <MainLayout></MainLayout>,
+    errorElement:<ErrorPage></ErrorPage>,
     children: [
       { path: "/",
         element: <Home></Home>
@@ -27,22 +30,27 @@ const router = createBrowserRouter([
       },
 
       { path: "/profile", 
-        element: <Auth><Profile></Profile></Auth>
+        element: <Auth>
+          <Profile></Profile>
+          </Auth>
       },
 
       { path: "/skills/:id", 
         element: <Auth>
             <SkillDetails></SkillDetails>
+            </Auth>
+      },
+      {
+        path: "/update-profile",
+        element:
+        <Auth>
+        <UpdateProfile></UpdateProfile>
         </Auth>
       },
       {
-  path: "/update-profile",
-  element: (
-    <Auth>
-      <UpdateProfile></UpdateProfile>
-    </Auth>
-  ),
-}
+        path: "/forget-password",
+        element: <ForgotPassword></ForgotPassword>,
+      },
     ],
   },
 ]);

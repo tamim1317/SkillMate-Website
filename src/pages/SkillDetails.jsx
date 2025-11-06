@@ -1,91 +1,27 @@
-import React, { useContext, useState } from "react";
-import { AuthContext } from "../providers/AuthProvider";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { AuthContext } from "../providers/AuthProvider";
 import toast, { Toaster } from "react-hot-toast";
-
-// Sample skills data
-const skills = [
-  {
-    "skillId": 1,
-    "skillName": "Beginner Guitar Lessons",
-    "providerName": "Alex Martin",
-    "providerEmail": "alex@skillswap.com",
-    "price": 20,
-    "rating": 4.8,
-    "slotsAvailable": 3,
-    "description": "Acoustic guitar classes for complete beginners.",
-    "image": "https://i.postimg.cc/9f3QvG6L/guitar.jpg",
-    "category": "Music"
-  },
-  {
-    "skillId": 2,
-    "skillName": "Spoken English Practice",
-    "providerName": "Sara Hossain",
-    "providerEmail": "sara@skillswap.com",
-    "price": 10,
-    "rating": 4.6,
-    "slotsAvailable": 5,
-    "description": "Conversational English sessions for non-native speakers.",
-    "image": "https://i.postimg.cc/fTbKJ3K1/english.jpg",
-    "category": "Language"
-  },
-  {
-    "skillId": 3,
-    "skillName": "Yoga for Beginners",
-    "providerName": "Nadia Rahman",
-    "providerEmail": "nadia@skillswap.com",
-    "price": 15,
-    "rating": 4.9,
-    "slotsAvailable": 4,
-    "description": "Morning yoga classes focused on balance and flexibility.",
-    "image": "https://i.postimg.cc/Y0VjrhqV/yoga.jpg",
-    "category": "Fitness"
-  },
-  {
-    "skillId": 4,
-    "skillName": "Basic Cooking Workshop",
-    "providerName": "Rahul Das",
-    "providerEmail": "rahul@skillswap.com",
-    "price": 12,
-    "rating": 4.7,
-    "slotsAvailable": 6,
-    "description": "Learn to cook simple and tasty meals.",
-    "image": "https://i.postimg.cc/Zn2fMN0h/cooking.jpg",
-    "category": "Lifestyle"
-  },
-  {
-    "skillId": 5,
-    "skillName": "Frontend Web Development",
-    "providerName": "Tamim Hossain",
-    "providerEmail": "tamim@skillswap.com",
-    "price": 25,
-    "rating": 5.0,
-    "slotsAvailable": 2,
-    "description": "Learn HTML, CSS, and JavaScript with real projects.",
-    "image": "https://i.postimg.cc/KYff7KxK/webdev.jpg",
-    "category": "Technology"
-  },
-  {
-    "skillId": 6,
-    "skillName": "Photography Basics",
-    "providerName": "Lina Akter",
-    "providerEmail": "lina@skillswap.com",
-    "price": 18,
-    "rating": 4.5,
-    "slotsAvailable": 3,
-    "description": "Understand light, composition, and camera settings.",
-    "image": "https://i.postimg.cc/0QJz1xv8/photo.jpg",
-    "category": "Art"
-  }
-];
 
 const SkillDetails = () => {
   const { id } = useParams();
   const { user } = useContext(AuthContext);
-  const skill = skills.find((s) => s.id === parseInt(id));
+  const [skills, setSkills] = useState([]);
+  const [skill, setSkill] = useState(null);
 
   const [name, setName] = useState(user?.displayName || "");
   const [email, setEmail] = useState(user?.email || "");
+
+  // Fetch skills from public folder
+  useEffect(() => {
+  fetch("/skills.json")
+    .then((res) => res.json())
+    .then((data) => {
+      const selectedSkill = data.find((s) => s.id === parseInt(id));
+      setSkill(selectedSkill); // set the skill after fetch
+    })
+    .catch((err) => console.error(err));
+}, [id]);
 
   const handleBookSession = (e) => {
     e.preventDefault();
@@ -94,34 +30,48 @@ const SkillDetails = () => {
     setEmail("");
   };
 
-  if (!skill) return <p>Skill not found</p>;
+  if (!skill) return <p className="text-center mt-10">Skill not found</p>;
 
   return (
-    <div>
-      <h2>{skill.skillName}</h2>
-      <img src={skill.image} alt={skill.skillName} width="300" />
-      <p>Provider: {skill.providerName}</p>
-      <p>Email: {skill.providerEmail}</p>
-      <p>Price: ${skill.price}</p>
-      <p>Rating: {skill.rating}</p>
-      <p>Slots Available: {skill.slotsAvailable}</p>
-      <p>Description: {skill.description}</p>
+    <div className="max-w-3xl mx-auto p-4">
+      <h2 className="text-3xl font-bold mb-4">{skill.title}</h2>
+      <img
+        src={skill.image}
+        alt={skill.title}
+        className="w-full h-64 object-cover rounded-lg mb-4"
+      />
+      <p><strong>Provider:</strong> {skill.provider}</p>
+      <p><strong>Email:</strong> {skill.providerEmail || "Not provided"}</p>
+      <p><strong>Price:</strong> ${skill.price}</p>
+      <p><strong>Rating:</strong> {skill.rating}</p>
+      <p><strong>Slots Available:</strong> {skill.slotsAvailable}</p>
+      <p className="mb-4"><strong>Description:</strong> {skill.description}</p>
 
-      <h3>Book a Session</h3>
-      <form onSubmit={handleBookSession}>
+      <h3 className="text-2xl font-semibold mb-2">Book a Session</h3>
+      <form
+        onSubmit={handleBookSession}
+        className="flex flex-col gap-3 max-w-md"
+      >
         <input
           type="text"
           value={name}
           placeholder="Your Name"
           onChange={(e) => setName(e.target.value)}
+          className="border p-2 rounded"
         />
         <input
           type="email"
           value={email}
           placeholder="Your Email"
           onChange={(e) => setEmail(e.target.value)}
+          className="border p-2 rounded"
         />
-        <button type="submit">Book Session</button>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
+        >
+          Book Session
+        </button>
       </form>
 
       <Toaster />
